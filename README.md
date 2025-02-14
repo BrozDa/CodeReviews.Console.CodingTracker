@@ -1,5 +1,14 @@
 # WORK  IN PROGRESS
+Current Plan of Action:
+1. Read about Spectre Console
+2. Read about Dapper ORM
+3. Read about Configuration Manager
+4. Create diagram how object should interact between each other
+5. Code
 
+- Self imposed challenge: Everything I learn needs to be only from official documentation for respective tools - no StackOverFlow, no blog posts, no videos,... - This is to enforce understanding by reading and getting more used to official documentation style which might be relevant for non-public codebases.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 # Console Coding Tracker Project by C# Academy
 
