@@ -20,6 +20,7 @@ namespace CodingTracker
         {
             DateTime start = GetStartTime();
             DateTime end = GetEndTime(start);
+
             return new CodingRecord();
         }
         public DateTime GetStartTime()
@@ -28,10 +29,11 @@ namespace CodingTracker
 
             var start = AnsiConsole.Prompt(
                 new TextPrompt<string>("Enter start time in format DD-MM-YYY HH:MM")
-            .DefaultValue(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))
+                .DefaultValue(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))
                 .Validate(
                     (input) => DateTime.TryParseExact(input, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out startdate)
-                ));
+                )
+                .ValidationErrorMessage("Invalid input format"));
 
             return startdate;
         }
@@ -39,12 +41,18 @@ namespace CodingTracker
         {
             DateTime endDate = DateTime.Now;
 
-            var end = AnsiConsole.Prompt(
-                new TextPrompt<string>("Enter start time in format DD-MM-YYY HH:MM")
-            .DefaultValue(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))
-                .Validate(
-                    (input) => (DateTime.TryParseExact(input, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate) 
-                                && endDate.Subtract(start) > TimeSpan.Zero)
+            var endd = AnsiConsole.Prompt(
+                new TextPrompt<string>("Enter end date")
+                .DefaultValue(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))
+                .Validate((input) =>
+                    {
+                        if (!DateTime.TryParseExact(input, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
+                            return ValidationResult.Error("Invalid format passed");
+                        if (endDate <= start)
+                            return ValidationResult.Error("End cannot be equal or smaller to start");
+
+                        return ValidationResult.Success();
+                    }
                 ));
 
             return endDate;

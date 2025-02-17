@@ -17,6 +17,12 @@ namespace CodingTracker
 
             CodingTracker tracker = new CodingTracker(databaseManager, inputManager, outputManager);
             tracker.Start();
+
+
+            string s = "a";
+            s = s.ToLower().Trim().ToLower().ToUpper().Replace("a", "b");
+            Console.WriteLine(s);
+
         }
     }
 }
