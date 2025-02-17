@@ -1,13 +1,5 @@
 ﻿using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CodingTracker
 {
@@ -20,8 +12,8 @@ namespace CodingTracker
         {
             DateTime start = GetStartTime();
             DateTime end = GetEndTime(start);
-
-            return new CodingRecord();
+            
+            return new CodingRecord(start, end, (end-start).Duration());
         }
         public DateTime GetStartTime()
         {
@@ -30,8 +22,8 @@ namespace CodingTracker
             var start = AnsiConsole.Prompt(
                 new TextPrompt<string>("Enter start time in format DD-MM-YYY HH:MM")
                 .DefaultValue(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))
-                .Validate(
-                    (input) => DateTime.TryParseExact(input, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out startdate)
+                .Validate((input) =>
+                     DateTime.TryParseExact(input, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out startdate)
                 )
                 .ValidationErrorMessage("Invalid input format"));
 
@@ -48,7 +40,7 @@ namespace CodingTracker
                     {
                         if (!DateTime.TryParseExact(input, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
                             return ValidationResult.Error("Invalid format passed");
-                        if (endDate <= start)
+                        if (endDate < start)
                             return ValidationResult.Error("End cannot be equal or smaller to start");
 
                         return ValidationResult.Success();

@@ -18,7 +18,7 @@ namespace CodingTracker
 
         public UserChoice PrintMenu()
         {
-            UserChoice[] menuOptions = (UserChoice[])Enum.GetValues(typeof(UserChoice));//{UserChoice.ViewRecords, UserChoice.AddSession, UserChoice.RemoveSession, UserChoice.UpdateSession, UserChoice.TrackSession};
+            UserChoice[] menuOptions = (UserChoice[])Enum.GetValues(typeof(UserChoice));
 
             UserChoice input = AnsiConsole.Prompt(
                 new SelectionPrompt<UserChoice>()
@@ -33,6 +33,7 @@ namespace CodingTracker
                     UserChoice.UpdateSession => "Update session",
                     UserChoice.TrackSession => "Start to track session",
                     UserChoice.ExitApplication => "Exit the application",
+                    _ => throw new Exception("Invalid value passed")
                 }));
 
             return input;

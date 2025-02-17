@@ -25,9 +25,9 @@ namespace CodingTracker
             End = end;
             Duration = start - end;
         }
-        public CodingRecord(int id, DateTime end, DateTime start, TimeSpan duration)
+        public CodingRecord(DateTime end, DateTime start, TimeSpan duration)
         {
-            ID = id;
+
             Start = start;
             End = end;
             Duration = duration;

@@ -19,21 +19,25 @@ namespace CodingTracker
         public bool DoesDatabaseExists() => File.Exists(DatabaseName);
         public void CreateDatabase()
         {
-            string sql = $"CREATE DABASE {DatabaseName};";
 
             using (var connection = new SQLiteConnection(ConnectionString)) 
-            { 
-                connection.Execute(sql);
+            {
+                connection.Open();
             }
         }
         public void CreateTable()
         {
-            string sql = $"CREATE TABLE {tableName} (" +
-                $"ID INTEGER,"+
+            string sql = $"CREATE TABLE '{tableName}' (" +
+                $"ID INTEGER PRIMARY KEY,"+
                 $"Start TEXT,"+
                 $"End TEXT,"+
-                $"Duration TEXT,"+
+                $"Duration TEXT"+
                 $");";
+
+            using(var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Execute(sql);
+            }
 
         }
         public List<CodingRecord> GetRecords()
@@ -46,6 +50,17 @@ namespace CodingTracker
                 sessions = connection.Query<CodingRecord>(sql).ToList();
             }
             return sessions;
+        }
+        public void InsertRecord(CodingRecord record)
+        {
+            string sql = $"INSERT INTO {tableName} (Start, End, Duration)" +
+                $"VALUES ('{record.Start}','{record.End}','{record.Duration}');";
+
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Execute(sql);
+            }
+
         }
         
 

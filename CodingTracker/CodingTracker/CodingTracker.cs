@@ -27,6 +27,7 @@ namespace CodingTracker
             if (!_databaseManager.DoesDatabaseExists())
             {
                 _databaseManager.CreateDatabase();
+                _databaseManager.CreateTable();
             }
 
             while (true)
@@ -64,7 +65,8 @@ namespace CodingTracker
         }
         public void HandleAddSession()
         {
-            _inputManager.GetNewRecord();
+            CodingRecord newRecord = _inputManager.GetNewRecord();
+            _databaseManager.InsertRecord(newRecord);
         }
         public void HandleRemoveSession()
         {
