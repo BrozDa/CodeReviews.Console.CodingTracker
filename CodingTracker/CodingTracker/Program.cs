@@ -10,6 +10,10 @@ namespace CodingTracker
         {
             string? attr = ConfigurationManager.AppSettings.Get("DatabasePath");
             Console.WriteLine(attr);
+
+            OutputManager output = new OutputManager();
+            output.PrintMenu();
+            Console.ReadLine();
         }
     }
 }
