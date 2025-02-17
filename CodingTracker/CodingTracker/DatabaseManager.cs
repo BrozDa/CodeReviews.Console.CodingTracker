@@ -10,12 +10,14 @@ namespace CodingTracker
     {
         public string ConnectionString { get; init; }
         public string DatabaseName { get; init; }
+        private string tableName = "Sessions";
         public DatabaseManager(string connectionString, string databaseName)
         {
             ConnectionString = connectionString;    
             DatabaseName = databaseName;
         }
-        private void CreateDatabase()
+        public bool DoesDatabaseExists() => File.Exists(DatabaseName);
+        public void CreateDatabase()
         {
             string sql = $"CREATE DABASE {DatabaseName};";
 
@@ -23,6 +25,27 @@ namespace CodingTracker
             { 
                 connection.Execute(sql);
             }
+        }
+        public void CreateTable()
+        {
+            string sql = $"CREATE TABLE {tableName} (" +
+                $"ID INTEGER,"+
+                $"Start TEXT,"+
+                $"End TEXT,"+
+                $"Duration TEXT,"+
+                $");";
+
+        }
+        public List<CodingRecord> GetRecords()
+        {
+            List<CodingRecord> sessions = new List<CodingRecord>();
+
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                string sql = $"SELECT * FROM {tableName};";
+                sessions = connection.Query<CodingRecord>(sql).ToList();
+            }
+            return sessions;
         }
         
 

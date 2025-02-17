@@ -1,16 +1,7 @@
 ﻿using Spectre.Console;
 using System;
 
-enum UserChoice
-{
-    ViewRecords = 1,
-    AddSession,
-    RemoveSession,
-    UpdateSession,
-    TrackSession,
-    ExitApplication
 
-}
 namespace CodingTracker
 {
     /// <summary>
@@ -45,6 +36,20 @@ namespace CodingTracker
                 }));
 
             return input;
+        }
+        public void PrintTable(string tableName, List<CodingRecord> records)
+        {
+            var table = new Table();
+            table.Title = new TableTitle(tableName);
+
+            table.AddColumns(new string[] {"ID", "Start", "End", "Duration"}).Centered();
+
+
+            foreach (CodingRecord record in records)
+            {
+                table.AddRow(new string[] { record.ID.ToString(), record.Start.ToString(), record.End.ToString(), record.Duration.ToString() });
+            }
+            AnsiConsole.Write(table);
         }
     }
 

@@ -8,12 +8,15 @@ namespace CodingTracker
     {
         static void Main(string[] args)
         {
-            string? attr = ConfigurationManager.AppSettings.Get("DatabasePath");
-            Console.WriteLine(attr);
+            string? connectionString = ConfigurationManager.AppSettings.Get("ConnectionString");
+            string? databaseName = ConfigurationManager.AppSettings.Get("DatabaseName");
 
-            OutputManager output = new OutputManager();
-            output.PrintMenu();
-            Console.ReadLine();
+            InputManager inputManager = new InputManager();
+            OutputManager outputManager = new OutputManager();
+            DatabaseManager databaseManager = new DatabaseManager(connectionString, databaseName);
+
+            CodingTracker tracker = new CodingTracker(databaseManager, inputManager, outputManager);
+            tracker.Start();
         }
     }
 }
