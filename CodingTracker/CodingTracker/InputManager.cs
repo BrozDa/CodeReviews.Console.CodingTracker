@@ -8,11 +8,18 @@ namespace CodingTracker
     /// </summary>
     internal class InputManager
     {
+        private string DateTimeFormat { get; init; }
+        public InputManager(string dateTimeFormat)
+        {
+            DateTimeFormat = dateTimeFormat;
+        }
         public CodingRecord GetNewRecord()
         {
+            Console.WriteLine($"Please enter date and time in {DateTimeFormat.ToUpper()} format");
+            Console.WriteLine();
+
             DateTime start = GetStartTime();
             DateTime end = GetEndTime(start);
-            
             return new CodingRecord(start, end, (end-start).Duration());
         }
         public DateTime GetStartTime()
@@ -20,10 +27,10 @@ namespace CodingTracker
             DateTime startdate = DateTime.Now;
 
             var start = AnsiConsole.Prompt(
-                new TextPrompt<string>("Enter start time in format DD-MM-YYY HH:MM")
-                .DefaultValue(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))
+                new TextPrompt<string>($"Enter start date and time: ")
+                .DefaultValue(DateTime.Now.ToString(DateTimeFormat))
                 .Validate((input) =>
-                     DateTime.TryParseExact(input, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out startdate)
+                     DateTime.TryParseExact(input, DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out startdate)
                 )
                 .ValidationErrorMessage("Invalid input format"));
 
@@ -34,11 +41,11 @@ namespace CodingTracker
             DateTime endDate = DateTime.Now;
 
             var endd = AnsiConsole.Prompt(
-                new TextPrompt<string>("Enter end date")
-                .DefaultValue(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))
+                new TextPrompt<string>("Enter end date and time: ")
+                .DefaultValue(DateTime.Now.ToString(DateTimeFormat))
                 .Validate((input) =>
                     {
-                        if (!DateTime.TryParseExact(input, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
+                        if (!DateTime.TryParseExact(input, DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
                             return ValidationResult.Error("Invalid format passed");
                         if (endDate < start)
                             return ValidationResult.Error("End cannot be equal or smaller to start");

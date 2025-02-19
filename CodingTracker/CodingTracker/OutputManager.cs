@@ -9,6 +9,11 @@ namespace CodingTracker
     /// </summary>
     internal class OutputManager
     {
+        private string DateTimeFormat { get; init; }
+        public OutputManager(string dateTimeFormat)
+        {
+            DateTimeFormat = dateTimeFormat;
+        }
         public void PrintMenuHeader()
         {
             Console.WriteLine("Welcome to Coding Tracker application");
@@ -40,17 +45,42 @@ namespace CodingTracker
         }
         public void PrintTable(string tableName, List<CodingRecord> records)
         {
+            
+
             var table = new Table();
+
             table.Title = new TableTitle(tableName);
 
-            table.AddColumns(new string[] {"ID", "Start", "End", "Duration"}).Centered();
+            table.AddColumns(
+                    new TableColumn("ID").Centered(),
+                    new TableColumn("Start").Centered(),
+                    new TableColumn("End").Centered(),
+                    new TableColumn("Duration").Centered()
+            );
 
 
-            foreach (CodingRecord record in records)
+            if (records == null || records.Count == 0)
             {
-                table.AddRow(new string[] { record.ID.ToString(), record.Start.ToString(), record.End.ToString(), record.Duration.ToString() });
+                table.AddRow()
+                table.AddRow("No records in database");
+
             }
+            else
+            {
+                foreach (CodingRecord record in records)
+                {
+                    table.AddRow(new string[]
+                        {
+                        record.ID.ToString(),
+                        record.Start.ToString(DateTimeFormat),
+                        record.End.ToString(DateTimeFormat),
+                        string.Format("{0:hh} h {0:mm} m", record.Duration),
+                        });
+                }
+            }
+
             AnsiConsole.Write(table);
+
         }
     }
 

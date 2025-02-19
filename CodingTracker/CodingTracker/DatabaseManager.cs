@@ -53,14 +53,47 @@ namespace CodingTracker
         }
         public void InsertRecord(CodingRecord record)
         {
-            string sql = $"INSERT INTO {tableName} (Start, End, Duration)" +
-                $"VALUES ('{record.Start}','{record.End}','{record.Duration}');";
+            string sql = $"INSERT INTO {tableName} (Start, End, Duration) " +
+                $"VALUES (@start," +
+                $"@end," +
+                $"@duration" +
+                $");"; ;
 
             using (var connection = new SQLiteConnection(ConnectionString))
             {
-                connection.Execute(sql);
+                connection.Execute(sql,
+                    new
+                    {
+                        start = record.Start,
+                        end = record.End,
+                        duration = record.Duration
+                    }
+                 );
             }
+        }
+        public void InsertBulk(List<CodingRecord> records)
+        {
 
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                string sql = $"INSERT INTO {tableName} (Start, End, Duration) " +
+                $"VALUES (@start," +
+                $"@end," +
+                $"@duration" +
+                $");";
+
+                foreach (var record in records) 
+                {
+                    connection.Execute(sql, 
+                        new {
+                            start = record.Start,
+                            end = record.End,
+                            duration = record.Duration
+                        }
+                    ); 
+                }
+                
+            }
         }
         
 

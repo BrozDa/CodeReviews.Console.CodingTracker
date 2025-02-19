@@ -1,4 +1,8 @@
 ﻿
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
+
 namespace CodingTracker
 {
     /// <summary>
@@ -7,30 +11,39 @@ namespace CodingTracker
     internal class CodingRecord
     {
         public int ID { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
-        public TimeSpan Duration { get; set; }
-        public CodingRecord()
-        {
-            //setup default values
-            ID = 0;
-            Start = DateTime.MinValue;
-            End = DateTime.MinValue;
-            Duration = TimeSpan.Zero;
-        }
-        public CodingRecord(int id, DateTime start, DateTime end)
-        {
-            ID = id;
-            Start = start;
-            End = end;
-            Duration = start - end;
-        }
-        public CodingRecord(DateTime end, DateTime start, TimeSpan duration)
-        {
 
-            Start = start;
-            End = end;
-            Duration = duration;
+        public string StartDateString { get; set; }
+        public string EndDateString { get; set; }
+        public string DurationString { get; set; }
+
+        public DateTime Start 
+        {
+            get => DateTime.Parse(StartDateString);
+            set => StartDateString = value.ToString(); 
+        }
+        public DateTime End
+        {
+            get => DateTime.Parse(EndDateString);
+            set => EndDateString = value.ToString();
+        }
+        public TimeSpan Duration
+        {
+            get => TimeSpan.Parse(DurationString);
+            set => DurationString = value.ToString(@"hh\:mm");
+        }
+        public CodingRecord(long ID, string Start, string End, string Duration)
+        {
+            this.ID = (int)ID; // Explicit conversion
+            this.StartDateString = Start;
+            this.EndDateString = End;
+            this.DurationString = Duration;
+        }
+        public CodingRecord(DateTime start, DateTime end, TimeSpan duration)
+        {
+            this.StartDateString = start.ToString();
+            this.EndDateString = end.ToString();
+            this.DurationString = duration.ToString(@"hh\:mm");
+ 
         }
 
     }

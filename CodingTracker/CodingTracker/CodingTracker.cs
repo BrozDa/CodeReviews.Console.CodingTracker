@@ -29,6 +29,8 @@ namespace CodingTracker
                 _databaseManager.CreateDatabase();
                 _databaseManager.CreateTable();
             }
+            //autofill
+            //_databaseManager.InsertBulk(GenerateRecords(50));
 
             while (true)
             {
@@ -42,6 +44,7 @@ namespace CodingTracker
             switch (menuChoice)
             {
                 case UserChoice.ViewRecords:
+                    HandleViewRecords();
                     break;
                 case UserChoice.AddSession:
                     HandleAddSession();
@@ -79,6 +82,26 @@ namespace CodingTracker
         public void HandleTrackSession()
         {
             throw new NotImplementedException();
+        }
+        private List<CodingRecord> GenerateRecords(int ammount)
+        {
+            DateTime start = new DateTime(2020, 01, 01, 00, 00, 00);
+            DateTime end;
+            TimeSpan duration;
+            Random random = new Random();
+
+            List<CodingRecord> records = new List<CodingRecord>();
+
+            for(int i = 0; i < ammount; i++)
+            {
+                end = start.AddHours(random.Next(24));
+                duration = end - start;
+                records.Add(new CodingRecord(start, end, duration));
+
+                start = end;
+            }
+
+            return records;
         }
     }
 }
