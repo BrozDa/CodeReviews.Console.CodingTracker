@@ -8,9 +8,33 @@ namespace CodingTracker
     {
         static void Main(string[] args)
         {
-            string connectionString = ConfigurationManager.AppSettings.Get("ConnectionString");
-            string databaseName = ConfigurationManager.AppSettings.Get("DatabaseName");
+            string defaultConnectionString = "Data Source=coding-tracker.sqlite;Version=3;";
+            string defaultRepositoryName = "coding-tracker.sqlite";
+
+            string? connectionString = ConfigurationManager.AppSettings.Get("ConnectionString");
+            connectionString ??= defaultConnectionString;
+
+            string? repositoryName = ConfigurationManager.AppSettings.Get("DatabaseName");
+            repositoryName ??= defaultRepositoryName;
+
             string dateTimeFormat = "dd-MM-yyyy HH:mm";
+
+            InputHandler inputHandler = new InputHandler(dateTimeFormat);
+            OutputHandler outputHandler = new OutputHandler(dateTimeFormat);
+            CodingSessionRepository repository = new CodingSessionRepository(connectionString);
+            CodingSessionTrackerApp app = new CodingSessionTrackerApp(inputHandler, outputHandler, repository);
+
+            app.Run();
+           /* DateTime now = DateTime.Now;
+            DateTime plusMin = now.AddMinutes(1);
+
+            Console.WriteLine($"Now: {now.ToString()}, plus Min: {plusMin.ToString()}");
+
+            TimeSpan diff = plusMin.Subtract( now );
+
+            Console.WriteLine($"Diff: {diff}");
+
+            Console.WriteLine(diff.TotalMinutes <=1);*/
 
             /*InputManager inputManager = new InputManager(dateTimeFormat);
             OutputManager outputManager = new OutputManager(dateTimeFormat);
@@ -24,7 +48,7 @@ namespace CodingTracker
             s = s.ToLower().Trim().ToLower().ToUpper().Replace("a", "b");
             Console.WriteLine(s);*/
 
-            CodingSessionRepository repository = new CodingSessionRepository(connectionString);
+            /*CodingSessionRepository repository = new CodingSessionRepository(connectionString);
             CodingSession session = new CodingSession() { Start = "now", End = "Later", Duration = "LongAF" };
 
             //repository.CreateRepository();
@@ -56,10 +80,7 @@ namespace CodingTracker
             foreach (var s in sessions)
             {
                 Console.WriteLine(s.ToString());
-            }
-
-
-
+            }*/
 
         }
     }

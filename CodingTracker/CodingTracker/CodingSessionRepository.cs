@@ -1,11 +1,5 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodingTracker
 {
@@ -39,11 +33,11 @@ namespace CodingTracker
             connection.Execute(sql, entity);
         }
 
-        public void Delete(CodingSession entity)
+        public void Delete(int id)
         {
             string sql = "DELETE FROM [CodingSessions] WHERE Id=@Id;";
             using var connection = new SQLiteConnection(_connectionString);
-            connection.Execute(sql, entity);
+            connection.Execute(sql, new {Id = id});
         }
 
         public IEnumerable<CodingSession> GetAll()

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodingTracker
+﻿namespace CodingTracker
 {
     internal class CodingSession
     {
@@ -13,6 +7,21 @@ namespace CodingTracker
         public string End { get; set; }
         public string Duration { get; set; }
 
+        public DateTime StartDateTime
+        {
+            get => DateTime.Parse(Start);
+            set => Start = value.ToString();
+        } 
+        public DateTime EndDateTime
+        {
+            get => DateTime.Parse(End);
+            set => End = value.ToString();
+        }
+        public TimeSpan DurationTimeSpan
+        {
+            get => TimeSpan.Parse(Duration);
+            set => Duration = value.ToString(@"hh\:mm");
+        }
         public override string ToString()
         {
             return $"Id: {Id}, Start: {Start}, End: {End}, Duration: {Duration}";
