@@ -13,6 +13,8 @@ namespace CodingTracker
         {
             DateTimeFormat = dateTimeFormat;
         }
+
+
         public CodingRecord GetNewRecord()
         {
             Console.WriteLine($"Please enter date and time in {DateTimeFormat.ToUpper()} format");
@@ -55,6 +57,19 @@ namespace CodingTracker
                 ));
 
             return endDate;
+        }
+
+        public int GetRecordID(List<CodingRecord> records)
+        {
+            HashSet<int> recordIds = new HashSet<int>(records.Select(i => i.ID));
+
+            var recordId = AnsiConsole.Prompt<int>(
+                new TextPrompt<int>("Enter ID of record you wish to delete: ")
+                .Validate((input) => recordIds.Contains(input))
+                .ValidationErrorMessage("Presented record ID is not in the database")
+            );
+
+            return recordId;
         }
     }
 }

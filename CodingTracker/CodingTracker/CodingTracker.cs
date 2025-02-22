@@ -30,7 +30,7 @@ namespace CodingTracker
                 _databaseManager.CreateTable();
             }
             //autofill
-            //_databaseManager.InsertBulk(GenerateRecords(50));
+            _databaseManager.InsertBulk(GenerateRecords(50));
 
             while (true)
             {
@@ -50,6 +50,7 @@ namespace CodingTracker
                     HandleAddSession();
                     break;
                 case UserChoice.RemoveSession:
+                    HandleRemoveSession();
                     break;
                 case UserChoice.UpdateSession:
                     break;
@@ -73,7 +74,10 @@ namespace CodingTracker
         }
         public void HandleRemoveSession()
         {
-            throw new NotImplementedException();
+            List<CodingRecord> sessions = _databaseManager.GetRecords();
+            _outputManager.PrintTable(_tableName, sessions);
+            int recordID =  _inputManager.GetRecordID(sessions);
+            _databaseManager.DeleteRecord(recordID);
         }
         public void HandleUpdateSession()
         {

@@ -45,12 +45,9 @@ namespace CodingTracker
         }
         public void PrintTable(string tableName, List<CodingRecord> records)
         {
-            
 
             var table = new Table();
-
             table.Title = new TableTitle(tableName);
-
             table.AddColumns(
                     new TableColumn("ID").Centered(),
                     new TableColumn("Start").Centered(),
@@ -58,12 +55,9 @@ namespace CodingTracker
                     new TableColumn("Duration").Centered()
             );
 
-
             if (records == null || records.Count == 0)
             {
-                table.AddRow()
                 table.AddRow("No records in database");
-
             }
             else
             {

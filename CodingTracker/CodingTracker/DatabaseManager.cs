@@ -95,6 +95,18 @@ namespace CodingTracker
                 
             }
         }
+
+        public void DeleteRecord(int recordID)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                string sql = $"DELETE FROM {tableName} " +
+                    $"WHERE ID=@id;";
+
+                connection.Execute(sql, new { id = recordID });
+            }
+        }
+
         
 
     }
