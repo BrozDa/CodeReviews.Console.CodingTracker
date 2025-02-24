@@ -12,6 +12,11 @@ namespace CodingTracker
             _dateTimeFormat = dateTimeFormat;
         }
 
+        private void ConsoleClear()
+        {
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+        }
         public void PrintMenuHeader()
         {
             Console.WriteLine("Welcome to Coding Tracker application");
@@ -20,6 +25,7 @@ namespace CodingTracker
         }
         public void PrintRecords(List<CodingSession> sessions)
         {
+
             if (sessions == null || sessions.Count == 0)
             {
                 Console.WriteLine("No records in database"); 
@@ -39,12 +45,14 @@ namespace CodingTracker
                 table.AddRow(new string[]
                     {
                         session.Id.ToString(),
-                        session.StartDateTime.ToString(_dateTimeFormat),
-                        session.EndDateTime.ToString(_dateTimeFormat),
-                        string.Format("{0:hh} h {0:mm} m", session.DurationTimeSpan),
+                        session.Start.ToString(_dateTimeFormat),
+                        session.End.ToString(_dateTimeFormat),
+                        session.Duration.ToString()
                     });
             }
             AnsiConsole.Write(table);
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
         }
 
     }

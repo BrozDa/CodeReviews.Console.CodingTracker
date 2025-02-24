@@ -11,9 +11,14 @@ namespace CodingTracker
         {
             _dateTimeFormat = dateTimeFormat;
         }
-
-        public UserChoice PrintMenuAndGetInput()
+        private void ConsoleClear()
         {
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+        }
+        public UserChoice GetMenuInput()
+        {
+
             UserChoice[] menuOptions = (UserChoice[])Enum.GetValues(typeof(UserChoice));
 
             UserChoice input = AnsiConsole.Prompt(
@@ -30,6 +35,7 @@ namespace CodingTracker
                     UserChoice.Exit => "Exit the application",
                 }));
 
+            
             return input;
         }
 
@@ -70,6 +76,7 @@ namespace CodingTracker
         {
             return end.Subtract(start.AddMinutes(1)) > TimeSpan.FromMinutes(1);
         }
+
         public int GetSessionId(List<CodingSession> sessions, string operation)
         {
             HashSet<int> ids = new HashSet<int>(sessions.Select(x=> x.Id));
