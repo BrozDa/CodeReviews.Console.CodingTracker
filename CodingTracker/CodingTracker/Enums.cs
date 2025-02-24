@@ -1,10 +1,10 @@
 ﻿enum UserChoice
 {
-    ViewRecords = 1,
-    AddSession,
-    RemoveSession,
-    UpdateSession,
-    TrackSession,
-    ExitApplication
+    View = 1,
+    Insert,
+    Delete,
+    Update,
+    Track,
+    Exit
 
 }

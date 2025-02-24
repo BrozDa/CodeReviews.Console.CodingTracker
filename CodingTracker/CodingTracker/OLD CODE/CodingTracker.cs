@@ -39,9 +39,9 @@ namespace CodingTracker
         }
         public void ProcessMainMenu()
         {
-            UserChoice menuChoice = _outputManager.PrintMenu();
+            //UserChoice menuChoice = _outputManager.PrintMenu();
 
-            switch (menuChoice)
+            /*switch (menuChoice)
             {
                 case UserChoice.ViewRecords:
                     HandleViewRecords();
@@ -60,7 +60,7 @@ namespace CodingTracker
                     Environment.Exit(0);
                     break;
 
-            }
+            }*/
         }
         public void HandleViewRecords()
         {

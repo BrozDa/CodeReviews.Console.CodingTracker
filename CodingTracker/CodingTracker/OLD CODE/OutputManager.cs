@@ -21,7 +21,7 @@ namespace CodingTracker
             Console.WriteLine();
         }
 
-        public UserChoice PrintMenu()
+        /*public UserChoice PrintMenu()
         {
             UserChoice[] menuOptions = (UserChoice[])Enum.GetValues(typeof(UserChoice));
 
@@ -42,7 +42,7 @@ namespace CodingTracker
                 }));
 
             return input;
-        }
+        }*/
         public void PrintTable(string tableName, List<CodingRecord> records)
         {
 

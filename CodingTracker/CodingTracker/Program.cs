@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Collections.Specialized;
 
 namespace CodingTracker
 {
@@ -8,21 +7,25 @@ namespace CodingTracker
     {
         static void Main(string[] args)
         {
+            string defaultConnectionString = "Data Source=coding-tracker.sqlite;Version=3;";
+            string defaultRepositoryName = "coding-tracker.sqlite";
+
             string? connectionString = ConfigurationManager.AppSettings.Get("ConnectionString");
-            string? databaseName = ConfigurationManager.AppSettings.Get("DatabaseName");
+            connectionString ??= defaultConnectionString;
+
+            string? repositoryName = ConfigurationManager.AppSettings.Get("DatabaseName");
+            repositoryName ??= defaultRepositoryName;
+
             string dateTimeFormat = "dd-MM-yyyy HH:mm";
 
-            InputManager inputManager = new InputManager(dateTimeFormat);
-            OutputManager outputManager = new OutputManager(dateTimeFormat);
-            DatabaseManager databaseManager = new DatabaseManager(connectionString, databaseName);
+            InputHandler inputHandler = new InputHandler(dateTimeFormat);
+            OutputHandler outputHandler = new OutputHandler(dateTimeFormat);
+            CodingSessionRepository repository = new CodingSessionRepository(connectionString, repositoryName);
+            DisplayHandler displayHandler= new DisplayHandler(inputHandler, outputHandler,dateTimeFormat);
+            CodingSessionTrackerApp app = new CodingSessionTrackerApp(displayHandler, repository);
 
-            CodingTracker tracker = new CodingTracker(databaseManager, inputManager, outputManager);
-            tracker.Start();
+            app.Run();
 
-
-            string s = "a";
-            s = s.ToLower().Trim().ToLower().ToUpper().Replace("a", "b");
-            Console.WriteLine(s);
 
         }
     }
