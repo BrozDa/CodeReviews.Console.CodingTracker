@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 
 namespace CodingTracker
@@ -7,38 +8,44 @@ namespace CodingTracker
     internal class CodingSessionTrackerApp
     {
         private CodingSessionRepository _repository;
-        private DisplayHandler _displayHandler;
+        private AppDisplayHandler _displayHandler;
 
-        public CodingSessionTrackerApp(DisplayHandler displayHandler, CodingSessionRepository repository)
+        private bool autoFill = true;
+
+        public CodingSessionTrackerApp(AppDisplayHandler displayHandler, CodingSessionRepository repository)
         {
             _repository = repository;
             _displayHandler = displayHandler;
         }
 
-        public void Run(bool autoFill = false)
+        public void Run()
         {
-            PrepareRepository(autoFill);
+            PrepareRepository(_repository.RepositoryPath);
 
             UserChoice choice;
 
-            while (true)
+            choice = _displayHandler.GetMenuInput();
+
+            while (choice != UserChoice.Exit)
             {
-                choice = _displayHandler.GetMenuInput();
                 ProcessChoice(choice);
+                choice = _displayHandler.GetMenuInput();
+                
             }
         }
-        private void PrepareRepository(bool shouldAutoFill)
+        public void PrepareRepository(string path)
         {
-            if (!File.Exists(_repository.RepositoryName))
+            if (!DoesRepositoryExists(path))
             {
                 _repository.CreateRepository();
-            }
-            if (shouldAutoFill)
-            {
-                List<CodingSession> sessions = GenerateRecords(100);
-                _repository.InsertBulk(sessions);
+                if (autoFill)
+                {
+                    List<CodingSession> sessions = GenerateRecords(100);
+                    _repository.InsertBulk(sessions);
+                }
             }
         }
+        private bool DoesRepositoryExists(string path) => File.Exists(_repository.RepositoryPath);
         private void ProcessChoice(UserChoice choice)
         {
             switch (choice) 
@@ -58,18 +65,20 @@ namespace CodingTracker
                 case UserChoice.Track:
                     HandleTrack();
                     break;
-                case UserChoice.Exit:
-                    Environment.Exit(0);
+                case UserChoice.Report:
+                    HandleReport();
                     break;
+                case UserChoice.Exit:
+                    return;
             }
         }
         private void HandleInsert()
         {
             CodingSession session = GetNewSession();
 
-            if (_displayHandler.ConfirmOperation())
+            if (_displayHandler.ConfirmOperation(session,"insert"))
             {
-                _repository.Add(session);
+                _repository.Insert(session);
             }
         }
         private void HandleView()
@@ -107,14 +116,20 @@ namespace CodingTracker
             {
                 return;
             }
-
-            if (_displayHandler.ConfirmOperation())
+            
+            if (_displayHandler.ConfirmOperation(session, "delete"))
             {
                 _repository.Delete(session);
             }
 
         }
-        
+        private void HandleReport()
+        {
+            //Report report = new Report(_repository, reportDisplayHandler, InputHandler);
+
+
+        }
+
         private void HandleTrack()
         {
             if(!_displayHandler.ConfirmTrackingStart())
@@ -134,7 +149,7 @@ namespace CodingTracker
             CodingSession trackedSession = new CodingSession{ Start = start, End = end};
 
             _displayHandler.PrintTrackedSession(trackedSession);
-            _repository.Add(trackedSession);
+            _repository.Insert(trackedSession);
 
         }
         private void TrackSession(Stopwatch stopwatch, (int left, int top) cursorPosition)
@@ -167,7 +182,7 @@ namespace CodingTracker
         }
         private List<CodingSession> GenerateRecords(int ammount)
         {
-            DateTime start = new DateTime(2020, 01, 01, 00, 00, 00);
+            DateTime start = new DateTime(2024, 01, 01, 00, 00, 00);
             DateTime end;
             Random random = new Random();
 

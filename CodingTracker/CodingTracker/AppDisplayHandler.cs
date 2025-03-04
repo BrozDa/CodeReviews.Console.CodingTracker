@@ -3,16 +3,13 @@ using System.Globalization;
 
 namespace CodingTracker
 {
-    internal class DisplayHandler
+    internal class AppDisplayHandler
     {
         private readonly string _dateTimeFormat;
 
-        public InputHandler Input { get; init; }
-        public OutputHandler Output { get; init; }
-        public DisplayHandler(InputHandler inputHandler, OutputHandler outputHandler, string dateTimeFormat)
+
+        public AppDisplayHandler(string dateTimeFormat)
         {
-            Input = inputHandler;
-            Output = outputHandler;
             _dateTimeFormat = dateTimeFormat;
         }
         private void ConsoleClear()
@@ -39,6 +36,7 @@ namespace CodingTracker
                     UserChoice.Delete => "Remove session",
                     UserChoice.Update => "Update session",
                     UserChoice.Track => "Start to track session",
+                    UserChoice.Report => "Create Report",
                     UserChoice.Exit => "Exit the application",
                 }));
             return input;
@@ -50,7 +48,8 @@ namespace CodingTracker
 
             AnsiConsole.Prompt(
                 new TextPrompt<string>($"Enter start date and time in format [green]{_dateTimeFormat.ToUpper()}[/]: ")
-                .Validate(input => ParseDateTimeInput(input, out startDate))
+                .Validate(input =>
+                            ParseDateTimeInput(input, out startDate))
                 .ValidationErrorMessage("[red]Invalid input format[/]")
                 );
 
@@ -152,14 +151,16 @@ namespace CodingTracker
                         session.Id.ToString(),
                         session.Start.ToString(_dateTimeFormat),
                         session.End.ToString(_dateTimeFormat),
-                        session.Duration.ToString(),
+                        (int)session.Duration.TotalMinutes + "min",
                     });
             }
             AnsiConsole.Write(table);
         }
-        public bool ConfirmOperation()
+        public bool ConfirmOperation(CodingSession session, string operation)
         {
             Console.WriteLine();
+
+            string prompt = $"Coding session start which started {session.Start}, ended {session.End} and lasted for {(int)session.Duration.TotalMinutes} minutes will be {operation}d to the database";
 
             var input = AnsiConsole.Prompt(
                 new TextPrompt<bool>("\n" + "Please confirm your input: ")

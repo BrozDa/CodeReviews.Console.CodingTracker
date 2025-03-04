@@ -10,10 +10,5 @@
             get => End - Start;
         }
 
-        public override string ToString()
-        {
-            return $"Id: {Id}, Start: {Start}, End: {End}, Duration: {Duration}";
-        }
-
     }
 }

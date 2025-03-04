@@ -8,11 +8,11 @@ namespace CodingTracker
     {
 
         private readonly string _connectionString;
-        public readonly string RepositoryName;
-        public CodingSessionRepository(string connectionString, string repositoryName)
+        public readonly string RepositoryPath;
+        public CodingSessionRepository(string connectionString, string repositoryPath)
         {
             _connectionString = connectionString;
-            RepositoryName = repositoryName;    
+            RepositoryPath = repositoryPath;
         }
 
         public void CreateRepository()
@@ -27,9 +27,9 @@ namespace CodingTracker
             connection.Execute(sql);
         }
 
-        public void Add(CodingSession entity)
+        public void Insert(CodingSession entity)
         {
-            string sql = "INSERT INTO [CodingSessions] ([Start], [End]) VALUES (@Start, @End);";
+            string sql = "INSERT INTO [CodingSessions] ([Start], [End], [Duration]) VALUES (@Start, @End, @Duration);";
 
             using var connection = new SQLiteConnection(_connectionString);
             connection.Execute(sql, entity);
@@ -39,12 +39,12 @@ namespace CodingTracker
         {
             string sql = "DELETE FROM [CodingSessions] WHERE Id=@Id;";
             using var connection = new SQLiteConnection(_connectionString);
-            connection.Execute(sql, new {Id = entity.Id});
+            connection.Execute(sql, new { Id = entity.Id });
         }
 
         public IEnumerable<CodingSession> GetAll()
         {
-            
+
             string sql = "SELECT [ID], [Start], [End] FROM [CodingSessions]";
             using var connection = new SQLiteConnection(_connectionString);
             var sessions = connection.Query<CodingSession>(sql);
@@ -66,12 +66,19 @@ namespace CodingTracker
 
             using var connection = new SQLiteConnection(_connectionString);
 
-                foreach (var entity in entities)
-                {
-                    connection.Execute(sql, entity);
-                }
+            foreach (var entity in entities)
+            {
+                connection.Execute(sql, entity);
+            }
+        }
+        public IEnumerable<CodingSession> GetDataWithinRange(DateTime startDate, DateTime endDate)
+        {
+            string sql = "SELECT * FROM [CodingSessions] WHERE [Start] >= @start AND [END]<@end;";
 
-            
+            using var connection = new SQLiteConnection(_connectionString);
+            var sessions = connection.Query<CodingSession>(sql, new {start = startDate, end= endDate });
+
+            return sessions;
         }
     }
 }
