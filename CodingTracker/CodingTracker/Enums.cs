@@ -7,13 +7,11 @@
     Track,
     Report,
     Exit
-
 }
-enum ReportChoice
+enum ReportTimeFrame
 {
-    ThisYear,
+    ThisYear, 
     ThisMonth,
     ThisWeek,
     Custom,
-    Exit,
 }

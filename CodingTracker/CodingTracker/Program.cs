@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using CodingTracker.Interfaces;
+using System.Configuration;
 
 namespace CodingTracker
 {
@@ -20,15 +21,22 @@ namespace CodingTracker
             string dateTimeFormat = "dd-MM-yyyy HH:mm";
 
 
-            CodingSessionRepository repository = new CodingSessionRepository(connectionString, repositoryName);
-            AppDisplayHandler AppDisplayHandler= new AppDisplayHandler(dateTimeFormat);
+            ICodingSessionRepository repository = new CodingSessionRepository(connectionString, repositoryName);
 
-            CodingSessionTrackerApp app = new CodingSessionTrackerApp(AppDisplayHandler, repository);
+            IIntputManager inputManager = new InputManager(dateTimeFormat);
+            IOutpuManager outputManager = new OutputManager(dateTimeFormat);
 
-            InputHandler InputHandler = new InputHandler(dateTimeFormat);
+            IReportManager reportManager = new ReportManager(inputManager, outputManager, repository);
 
-            ReportDisplayHandler reportDisplayHandler = new ReportDisplayHandler();
-            Report report = new Report(repository, reportDisplayHandler, InputHandler);
+            ISessionTracker sessionTracker = new SessionTracker(inputManager, outputManager, repository);
+
+            ICodingSessionManager sessionManager = new CodingSessionManager(inputManager, outputManager, repository);
+
+            
+
+            CodingSessionTrackerApp app = new CodingSessionTrackerApp(inputManager, outputManager, sessionManager, sessionTracker, reportManager);
+
+ 
             
             //report.Run();
             app.Run();

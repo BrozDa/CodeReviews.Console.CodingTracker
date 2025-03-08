@@ -4,11 +4,11 @@ using System.Data.SQLite;
 
 namespace CodingTracker
 {
-    internal class CodingSessionRepository : ICodingSessionRepository<CodingSession>
+    internal class CodingSessionRepository : ICodingSessionRepository
     {
 
         private readonly string _connectionString;
-        public readonly string RepositoryPath;
+        public string RepositoryPath { get; }
         public CodingSessionRepository(string connectionString, string repositoryPath)
         {
             _connectionString = connectionString;
@@ -80,5 +80,6 @@ namespace CodingTracker
 
             return sessions;
         }
+        
     }
 }

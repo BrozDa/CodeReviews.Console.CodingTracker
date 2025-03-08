@@ -1,7 +1,8 @@
 ﻿namespace CodingTracker
 {
-    internal interface ICodingSessionRepository<CodingSession> 
+    internal interface ICodingSessionRepository
     {
+        string RepositoryPath{get;}
         void Insert(CodingSession entity); 
         IEnumerable<CodingSession> GetAll();
         void Update(CodingSession entity);
