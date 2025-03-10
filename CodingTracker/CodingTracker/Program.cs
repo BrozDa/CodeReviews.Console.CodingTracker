@@ -11,9 +11,13 @@ namespace CodingTracker
             var serviceProvider = ConfigureServices();
 
             var app = serviceProvider.GetRequiredService<CodingSessionTrackerApp>();
+
             app.Run();
         }
 
+        /// <summary>
+        /// Facilitate all necessary dependencies for the application
+        /// </summary>
         private static ServiceProvider ConfigureServices()
         {
             string defaultConnectionString = "Data Source=coding-tracker.sqlite;Version=3;";

@@ -1,9 +1,10 @@
 ﻿namespace CodingTracker
 {
+    /// <summary>
+    /// Represents database record for CodingSession
+    /// </summary>
     internal class CodingSession
     {
-        private DateTime _start;
-        private DateTime _end;
         public int Id { get; set; }
 
         public DateTime Start { get; set; }
