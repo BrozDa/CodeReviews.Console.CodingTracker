@@ -1,15 +1,3 @@
-# WORK  IN PROGRESS
-Current Plan of Action:
-1. Read about Spectre Console
-2. Read about Dapper ORM
-3. Read about Configuration Manager
-4. Create diagram how object should interact between each other
-5. Code
-
-- Self imposed challenge: Everything I learn needs to be only from official documentation for respective tools - no StackOverFlow, no blog posts, no videos,... - This is to enforce understanding by reading and getting more used to official documentation style which might be relevant for non-public codebases.
-
------------------------------------------------------------------------------------------------------------------------------------------
-
 # Console Coding Tracker Project by C# Academy
 
 Project Link: [https://www.thecsharpacademy.com/project/12/habit-logger](https://www.thecsharpacademy.com/project/13/coding-tracker)
@@ -33,12 +21,18 @@ Project Link: [https://www.thecsharpacademy.com/project/12/habit-logger](https:/
 * Let the users filter their coding records per period (weeks, days, years) and/or order ascending or descending.
 * Create reports where the users can see their total and average coding session per period.
 * Create the ability to set coding goals and show how far the users are from reaching their goal, along with how many hours a day they would have to code to reach their goal. You can do it via SQL queries or with C#.
-* 
+  
 ## Lessons Learned
---
+* Improved my understanding of parsing date and time and how to pass them between methods effectively.
+* Learned Spectre.Console, which provided an easy and efficient way to gather and validate user input. The documentation was well-written and approachable, making it easier to learn.
+* Learned how to use Dapper for object mapping. Initially, this was tricky, especially when handling time-related data, but it became clearer as I worked through it.
+* Gained experience in managing dependencies using a service container. This approach allowed me to refactor classes more easily—whenever I needed to rework a class, I just had to implement the appropriate interface.
 
 ## Areas for Improvement
---
+* I aimed to structure this project correctly, but in retrospect, it feels somewhat overengineered. While the service container effectively manages dependencies, I can't shake the feeling that it might be more than what was necessary for this project. Streamlining the architecture in future projects could be an area of focus.
 
 ## Main Resources Used
---
+Spectre console - https://spectreconsole.net/
+Dapper ORM - https://www.learndapper.com/
+MS docs for DateTime
+
