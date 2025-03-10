@@ -1,4 +1,4 @@
-﻿enum UserChoice
+﻿internal enum UserChoice
 {
     View = 1,
     Insert,
@@ -8,9 +8,10 @@
     Report,
     Exit
 }
-enum ReportTimeFrame
+
+internal enum ReportTimeFrame
 {
-    ThisYear, 
+    ThisYear,
     ThisMonth,
     ThisWeek,
     Custom,

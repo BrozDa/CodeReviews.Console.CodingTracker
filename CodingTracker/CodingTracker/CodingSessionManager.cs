@@ -4,11 +4,11 @@ namespace CodingTracker
 {
     internal class CodingSessionManager : ICodingSessionManager
     {
-        private IIntputManager _inputManager;
-        private IOutpuManager _outputManager;
+        private IInputManager _inputManager;
+        private IOutputManager _outputManager;
         private ICodingSessionRepository _sessionRepository;
 
-        public CodingSessionManager(IIntputManager inputManager, IOutpuManager outputManager, ICodingSessionRepository repository)
+        public CodingSessionManager(IInputManager inputManager, IOutputManager outputManager, ICodingSessionRepository repository)
         {
             _sessionRepository = repository;
             _inputManager = inputManager;
@@ -25,6 +25,7 @@ namespace CodingTracker
                 _sessionRepository.InsertBulk(sessions);
             }
         }
+
         public IEnumerable<CodingSession> GenerateRecords(int count)
         {
             DateTime start = new DateTime(2025, 02, 01, 00, 00, 00);
@@ -44,6 +45,7 @@ namespace CodingTracker
 
             return records;
         }
+
         public void HandleView()
         {
             List<CodingSession> sessions = _sessionRepository.GetAll().ToList();
@@ -52,15 +54,17 @@ namespace CodingTracker
             Console.WriteLine("Press any key to continue");
             Console.ReadLine();
         }
+
         public void HandleInsert()
         {
             CodingSession session = _inputManager.GetNewSession();
 
-            if (_inputManager.ConfirmOperation(session, "add"))
+            if (_inputManager.ConfirmOperation(session, "insert"))
             {
                 _sessionRepository.Insert(session);
             }
         }
+
         public void HandleUpdate()
         {
             List<CodingSession> sessions = _sessionRepository.GetAll().ToList();
@@ -76,20 +80,19 @@ namespace CodingTracker
             CodingSession updatedSession = _inputManager.GetNewSession();
             updatedSession.Id = originalSession.Id;
 
-            if (_inputManager.ConfirmOperation(originalSession, "update"))
+
+            if (_inputManager.ConfirmUpdate(originalSession, updatedSession, "update"))
             {
                 _sessionRepository.Update(updatedSession);
             }
-
-
         }
+
         public void HandleDelete()
         {
             List<CodingSession> sessions = _sessionRepository.GetAll().ToList();
             _outputManager.PrintRecords(sessions);
 
             CodingSession? session = _inputManager.GetSessionFromUserInput(sessions, "delete");
-
 
             if (session == null)
             {
@@ -100,9 +103,6 @@ namespace CodingTracker
             {
                 _sessionRepository.Delete(session);
             }
-
         }
-
-        
     }
 }

@@ -1,13 +1,15 @@
 ﻿namespace CodingTracker
 {
-    internal interface IOutpuManager
+    internal interface IOutputManager
     {
         void ConsoleClear();
+
         void PrintMenuHeader();
+
         void PrintRecords(List<CodingSession> sessions);
 
         void PrintTrackingPanel(TimeSpan elapsed);
-        void PrintTrackedSession(CodingSession session);
 
+        void PrintTrackedSession(CodingSession session);
     }
 }

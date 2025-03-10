@@ -1,16 +1,23 @@
 ﻿using CodingTracker.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 
 namespace CodingTracker
 {
-    
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
+        {
+            var serviceProvider = ConfigureServices();
+
+            var app = serviceProvider.GetRequiredService<CodingSessionTrackerApp>();
+            app.Run();
+        }
+
+        private static ServiceProvider ConfigureServices()
         {
             string defaultConnectionString = "Data Source=coding-tracker.sqlite;Version=3;";
             string defaultRepositoryPath = "coding-tracker.sqlite";
-            
 
             string? connectionString = ConfigurationManager.AppSettings.Get("ConnectionString");
             connectionString ??= defaultConnectionString;
@@ -20,28 +27,42 @@ namespace CodingTracker
 
             string dateTimeFormat = "dd-MM-yyyy HH:mm";
 
+            var services = new ServiceCollection();
 
-            ICodingSessionRepository repository = new CodingSessionRepository(connectionString, repositoryName);
+            services.AddSingleton<ICodingSessionRepository>(sp => new CodingSessionRepository(connectionString, repositoryName));
+            services.AddSingleton<IInputManager>(sp => new InputManager(dateTimeFormat));
+            services.AddSingleton<IOutputManager>(sp => new OutputManager(dateTimeFormat));
 
-            IIntputManager inputManager = new InputManager(dateTimeFormat);
-            IOutpuManager outputManager = new OutputManager(dateTimeFormat);
+            services.AddSingleton<IReportManager>(sp =>
+                new ReportManager(
+                    sp.GetRequiredService<IInputManager>(),
+                    sp.GetRequiredService<IOutputManager>(),
+                    sp.GetRequiredService<ICodingSessionRepository>()
+            ));
 
-            IReportManager reportManager = new ReportManager(inputManager, outputManager, repository);
+            services.AddSingleton<ISessionTracker>(sp =>
+                new SessionTracker(
+                    sp.GetRequiredService<IInputManager>(),
+                    sp.GetRequiredService<IOutputManager>(),
+                    sp.GetRequiredService<ICodingSessionRepository>()
+            ));
 
-            ISessionTracker sessionTracker = new SessionTracker(inputManager, outputManager, repository);
+            services.AddSingleton<ICodingSessionManager>(sp =>
+                new CodingSessionManager(
+                    sp.GetRequiredService<IInputManager>(),
+                    sp.GetRequiredService<IOutputManager>(),
+                    sp.GetRequiredService<ICodingSessionRepository>()
+            ));
 
-            ICodingSessionManager sessionManager = new CodingSessionManager(inputManager, outputManager, repository);
+            services.AddSingleton<CodingSessionTrackerApp>(sp => 
+            new CodingSessionTrackerApp(
+                sp.GetRequiredService<IInputManager>(), 
+                sp.GetRequiredService<IOutputManager>(), 
+                sp.GetRequiredService<ICodingSessionManager>(), 
+                sp.GetRequiredService<ISessionTracker>(), 
+                sp.GetRequiredService<IReportManager>()));
 
-            
-
-            CodingSessionTrackerApp app = new CodingSessionTrackerApp(inputManager, outputManager, sessionManager, sessionTracker, reportManager);
-
- 
-            
-            //report.Run();
-            app.Run();
-
-
+            return services.BuildServiceProvider();
         }
     }
 }

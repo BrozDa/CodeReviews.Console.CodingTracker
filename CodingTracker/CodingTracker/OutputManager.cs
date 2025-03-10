@@ -2,7 +2,7 @@
 
 namespace CodingTracker
 {
-    internal class OutputManager: IOutpuManager
+    internal class OutputManager : IOutputManager
     {
         private readonly string _dateTimeFormat;
 
@@ -10,17 +10,20 @@ namespace CodingTracker
         {
             _dateTimeFormat = dateTimeFormat;
         }
+
         public void ConsoleClear()
         {
             Console.Clear();
             Console.SetCursorPosition(0, 0);
         }
+
         public void PrintMenuHeader()
         {
             Console.WriteLine("Welcome to Coding Tracker application");
             Console.WriteLine("This application allow you to manually add sessions from past or track a session as it happen");
             Console.WriteLine();
         }
+
         public void PrintRecords(List<CodingSession> sessions)
         {
             ConsoleClear();
@@ -45,6 +48,7 @@ namespace CodingTracker
             }
             AnsiConsole.Write(table);
         }
+
         public void PrintTrackingPanel(TimeSpan elapsed)
         {
             var panel = new Panel($"Session is being tracked\n\n" +
@@ -54,6 +58,7 @@ namespace CodingTracker
 
             AnsiConsole.Write(panel);
         }
+
         public void PrintTrackedSession(CodingSession session)
         {
             Console.WriteLine();

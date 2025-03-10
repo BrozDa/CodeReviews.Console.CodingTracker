@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace CodingTracker
 {
-    internal class InputManager: IIntputManager
+    internal class InputManager : IInputManager
     {
         private readonly string _dateTimeFormat;
 
@@ -12,6 +12,7 @@ namespace CodingTracker
         {
             _dateTimeFormat = dateTimeFormat;
         }
+
         public UserChoice GetMenuInput()
         {
             UserChoice[] menuOptions = (UserChoice[])Enum.GetValues(typeof(UserChoice));
@@ -32,6 +33,7 @@ namespace CodingTracker
                 }));
             return input;
         }
+
         public CodingSession GetNewSession()
         {
             DateTime start = GetStartTime();
@@ -39,6 +41,7 @@ namespace CodingTracker
 
             return new CodingSession() { Start = start, End = end };
         }
+
         public DateTime GetStartTime()
         {
             DateTime startDate = DateTime.Now;
@@ -53,6 +56,7 @@ namespace CodingTracker
 
             return startDate;
         }
+
         public DateTime GetEndTime(DateTime startDate)
         {
             DateTime endDate = DateTime.Now;
@@ -71,15 +75,16 @@ namespace CodingTracker
                     }
 
                     return ValidationResult.Success();
-
                 }));
 
             return endDate;
         }
+
         private bool ParseDateTimeInput(string start, out DateTime parsed)
         {
             return DateTime.TryParseExact(start, _dateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsed);
         }
+
         public CodingSession? GetSessionFromUserInput(List<CodingSession> sessions, string operation)
         {
             HashSet<int> ids = new HashSet<int>(sessions.Select(x => x.Id));
@@ -96,9 +101,19 @@ namespace CodingTracker
         {
             Console.WriteLine();
 
-            string prompt = $"Coding session which started {session.Start.ToString(_dateTimeFormat)}, " +
-                $"ended {session.End.ToString(_dateTimeFormat)} " +
-                $"and lasted for {(int)session.Duration.TotalMinutes} minutes will be {operation}d\n" +
+            string prompt = $"Session - Start: {session.Start.ToString(_dateTimeFormat)} | " +
+                $"End: {session.End.ToString(_dateTimeFormat)} | Duration: {session.Duration.TotalMinutes} minutes will be {operation}d\n" +
+                $"Please confirm";
+
+            return AnsiConsole.Confirm(prompt);
+        }
+        public bool ConfirmUpdate(CodingSession original, CodingSession updated, string operation)
+        {
+            Console.WriteLine();
+            string prompt = $"Session - Start: {original.Start.ToString(_dateTimeFormat)} | " +
+                $"End: {original.End} | Duration: {original.Duration.TotalMinutes} minutes will be {operation}d\n"+
+                $"Session - Start: {updated.Start.ToString(_dateTimeFormat)} | " +
+                $"End: {updated.End.ToString(_dateTimeFormat)} | Duration: {updated.Duration.TotalMinutes} minutes\n" +
                 $"Please confirm";
 
             return AnsiConsole.Confirm(prompt);
@@ -110,14 +125,13 @@ namespace CodingTracker
             {
                 Console.WriteLine("Press 'ENTER' to start tracking or 'ESC' to exit: ");
                 input = Console.ReadKey(true).Key;
-
             } while ((input != ConsoleKey.Enter) && (input != ConsoleKey.Escape));
 
             return input == ConsoleKey.Enter;
         }
+
         public ReportTimeFrame GetTimeRangeForReport()
         {
-
             ReportTimeFrame[] reportTimeFrames = (ReportTimeFrame[])Enum.GetValues(typeof(ReportTimeFrame));
 
             ReportTimeFrame input = AnsiConsole.Prompt(
@@ -134,7 +148,5 @@ namespace CodingTracker
 
             return input;
         }
-
-        
     }
 }

@@ -2,18 +2,19 @@
 
 namespace CodingTracker
 {
-    internal class ReportManager: IReportManager
+    internal class ReportManager : IReportManager
     {
-        private IIntputManager _inputManager;
-        private IOutpuManager _outputManager;
+        private IInputManager _inputManager;
+        private IOutputManager _outputManager;
         private ICodingSessionRepository _codingSessionRepository;
 
-        public ReportManager(IIntputManager inputManager, IOutpuManager outputManager, ICodingSessionRepository repository)
+        public ReportManager(IInputManager inputManager, IOutputManager outputManager, ICodingSessionRepository repository)
         {
             _codingSessionRepository = repository;
             _inputManager = inputManager;
             _outputManager = outputManager;
         }
+
         public void GetReport()
         {
             ReportTimeFrame timeFrame = _inputManager.GetTimeRangeForReport();
@@ -24,8 +25,8 @@ namespace CodingTracker
             _outputManager.PrintRecords(sessions);
             Console.WriteLine("Press any key to continue");
             Console.ReadLine();
-
         }
+
         private DateTime GetStartDateForReport(ReportTimeFrame timeFrame)
         {
             return timeFrame switch
@@ -36,6 +37,7 @@ namespace CodingTracker
                 ReportTimeFrame.Custom => _inputManager.GetStartTime()
             };
         }
+
         private DateTime GetFirstDayOfWeek()
         {
             DateTime today = DateTime.Now;
@@ -43,6 +45,7 @@ namespace CodingTracker
             today = today.AddDays(offset);
             return today;
         }
+
         private DateTime GetEndDateForReport(ReportTimeFrame timeFrame, DateTime startDate)
         {
             DateTime today = DateTime.Now;
