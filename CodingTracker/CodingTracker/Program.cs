@@ -22,7 +22,7 @@ namespace CodingTracker
             string defaultConnectionString = "Data Source=coding-tracker.sqlite;Version=3;";
             string defaultRepositoryPath = "coding-tracker.sqlite";
 
-            // had to do it this way as codacy was reporting unused "using" statement for using System.Configuration;
+            // had to do it this way as codacy was reporting unused using statement for System Configuration;
             string? connectionString = System.Configuration.ConfigurationManager.AppSettings.Get("ConnectionString");
             connectionString ??= defaultConnectionString;
 
