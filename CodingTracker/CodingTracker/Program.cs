@@ -1,6 +1,5 @@
 ﻿using CodingTracker.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System.Configuration;
 
 namespace CodingTracker
 {
@@ -23,10 +22,11 @@ namespace CodingTracker
             string defaultConnectionString = "Data Source=coding-tracker.sqlite;Version=3;";
             string defaultRepositoryPath = "coding-tracker.sqlite";
 
-            string? connectionString = ConfigurationManager.AppSettings.Get("ConnectionString");
+            // had to do it this way as codacy was reporting unused "using" statement for using System.Configuration;
+            string? connectionString = System.Configuration.ConfigurationManager.AppSettings.Get("ConnectionString");
             connectionString ??= defaultConnectionString;
 
-            string? repositoryName = ConfigurationManager.AppSettings.Get("DatabaseName");
+            string? repositoryName = System.Configuration.ConfigurationManager.AppSettings.Get("DatabaseName");
             repositoryName ??= defaultRepositoryPath;
 
             string dateTimeFormat = "dd-MM-yyyy HH:mm";
