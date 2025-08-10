@@ -32,7 +32,7 @@ Project Link: [https://www.thecsharpacademy.com/project/12/habit-logger](https:/
 * I aimed to structure this project correctly, but in retrospect, it feels somewhat overengineered. While the service container effectively manages dependencies, I can't shake the feeling that it might be more than what was necessary for this project. Streamlining the architecture in future projects could be an area of focus.
 
 ## Main Resources Used
-Spectre console - https://spectreconsole.net/
-Dapper ORM - https://www.learndapper.com/
-MS docs for DateTime
+* Spectre console - https://spectreconsole.net/
+* Dapper ORM - https://www.learndapper.com/
+* MS docs for DateTime
 
